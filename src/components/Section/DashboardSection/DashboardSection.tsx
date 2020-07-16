@@ -1,6 +1,7 @@
 import React from 'react';
 import { cn } from '@bem-react/classname';
 import { Link } from 'react-router-dom';
+import { Routes } from 'routes';
 
 const cnDashboard = cn('Dashboard');
 
@@ -10,7 +11,7 @@ function DashboardSection({}: DashboardSectionProps) {
     return (
         <div className={cnDashboard()}>
             <h1>DashboardSection</h1>
-            <Link to="/">Home</Link>
+            <Link to={Routes.HOME}>Home</Link>
         </div>
     );
 }

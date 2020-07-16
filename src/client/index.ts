@@ -4,7 +4,7 @@ import { AppState } from 'store';
 import { App } from 'components/App/App@client';
 import { PAGES } from 'pages';
 import { LazyComponentType } from 'components/Lazy/Lazy';
-import { getRoute } from 'selectors/getRoute/getRoute';
+import { getPageName } from 'selectors/getRoute/getPageName';
 
 declare global {
     interface Window {
@@ -17,10 +17,10 @@ delete window.__PRELOADED_STATE__;
 
 document.addEventListener('DOMContentLoaded', async () => {
     // Load module
-    const route = getRoute(state);
+    const pageName = getPageName(state);
 
-    if (route && PAGES[route]) {
-        await (PAGES[route].component as LazyComponentType).loader();
+    if (pageName && PAGES[pageName]) {
+        await (PAGES[pageName].component as LazyComponentType).loader();
     }
 
     hydrate(createElement(App, { state }), document.getElementById('root'));

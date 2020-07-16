@@ -1,12 +1,12 @@
 import { match } from 'react-router';
-import { Routes } from 'routes';
+import { PageName } from 'pages';
 
 export interface RouterParams {
     id: string;
 }
 
 export interface RouterEvent extends match<RouterParams> {
-    route: Routes;
+    pageName: PageName;
 }
 
 export type RouterState = RouterEvent | undefined | null;

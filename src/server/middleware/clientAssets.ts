@@ -2,7 +2,7 @@ import { Request, Response, NextFunction, Handler } from 'express';
 
 import { readFile } from 'fs';
 import { join } from 'path';
-import { getRoute } from 'selectors/getRoute/getRoute';
+import { getPageName } from 'selectors/getRoute/getPageName';
 
 const DEFAULT_CSS = 'main.css';
 const DEFAULT_JS = 'main.js';
@@ -37,11 +37,11 @@ export function clientAssets(): Handler {
             }
 
             const getFiles = (names: string[]) => names.map((name) => files && files[name]).filter(Boolean) as string[];
-            const route = getRoute(req.state.state);
+            const pageName = getPageName(req.state.state);
 
             req.state.files = files;
-            req.state.css = getFiles([DEFAULT_CSS, `page.${route}.css`]);
-            req.state.js = getFiles([`page.${route}.js`, DEFAULT_JS]);
+            req.state.css = getFiles([DEFAULT_CSS, `page.${pageName}.css`]);
+            req.state.js = getFiles([`page.${pageName}.js`, DEFAULT_JS]);
 
             if (process.env.NODE_ENV !== 'production') {
                 files = undefined;

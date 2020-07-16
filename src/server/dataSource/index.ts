@@ -1,19 +1,19 @@
 import { RouterState } from 'store/router/types';
 import { AppState } from 'store';
-import { Routes } from 'routes';
+import { PageName } from '../../pages';
 
 export async function getData(router: RouterState): Promise<Partial<AppState>> {
     if (!router) {
         throw new Error(`Router is not defined`);
     }
 
-    if (router.route === Routes.HOME) {
+    if (router.pageName === PageName.HOME) {
         return {};
     }
 
-    if (router.route === Routes.DASHBOARD) {
+    if (router.pageName === PageName.DASHBOARD) {
         return {};
     }
 
-    throw new Error(`Cannot find data for route "${router.route}"`);
+    throw new Error(`Cannot find data for route "${router.pageName}"`);
 }
