@@ -15,6 +15,7 @@ export const App: React.FC<AppProps> = function App({ state }: AppProps) {
     return (
         <Provider store={createStore(state)}>
             <BrowserRouter>
+                {/*Suspense triggers Warning: Did not expect server HTML to contain a <div> in <div>.*/}
                 <React.Suspense fallback={<h1>Loading</h1>}>
                     <BaseApp />
                 </React.Suspense>

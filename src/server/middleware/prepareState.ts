@@ -1,6 +1,6 @@
 import { Handler, Request, Response, NextFunction } from 'express';
 import { getData } from 'server/dataSource';
-import { rootReducer } from 'store';
+import { mergeState, rootReducer } from 'store';
 import { matchUrl } from 'server/utils/matchUrl';
 
 export function prepareState(): Handler {
@@ -12,11 +12,13 @@ export function prepareState(): Handler {
                 return res.status(404).end();
             }
 
-            const state = {
-                ...rootReducer(undefined, { type: 'INIT' }),
-                router,
-                ...(await getData(router)),
-            };
+            const state = rootReducer(
+                undefined,
+                mergeState({
+                    router,
+                    ...(await getData(router)),
+                }),
+            );
 
             req.state = {
                 files: {},

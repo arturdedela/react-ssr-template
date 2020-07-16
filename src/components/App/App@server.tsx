@@ -15,37 +15,37 @@ export const App: React.FC<AppProps> = function App({ url, state: { state, js, c
     const store = createStore(state);
 
     return (
-        <Provider store={store}>
-            <StaticRouter location={url}>
-                <html>
-                    <head>
-                        {css.map((file) => (
-                            <link rel="stylesheet" href={file} key={file} />
-                        ))}
+        <html>
+            <head>
+                {css.map((file) => (
+                    <link rel="stylesheet" href={file} key={file} />
+                ))}
 
-                        <title>React SSR template</title>
+                <title>React SSR template</title>
 
-                        <meta name="viewport" content="width=device-width, initial-scale=1" />
-                    </head>
-                    <body>
-                        <div id="root">
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+            </head>
+            <body>
+                <div id="root">
+                    <Provider store={store}>
+                        <StaticRouter location={url}>
                             <BaseApp />
-                        </div>
-                        <script
-                            dangerouslySetInnerHTML={{
-                                __html: `window.__PRELOADED_STATE__=${JSON.stringify(store.getState()).replace(
-                                    /</g,
-                                    '\\u003c',
-                                )}`,
-                            }}
-                        />
+                        </StaticRouter>
+                    </Provider>
+                </div>
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `window.__PRELOADED_STATE__=${JSON.stringify(store.getState()).replace(
+                            /</g,
+                            '\\u003c',
+                        )}`,
+                    }}
+                />
 
-                        {js.map((file) => (
-                            <script src={file} key={file} defer />
-                        ))}
-                    </body>
-                </html>
-            </StaticRouter>
-        </Provider>
+                {js.map((file) => (
+                    <script src={file} key={file} defer />
+                ))}
+            </body>
+        </html>
     );
 };
