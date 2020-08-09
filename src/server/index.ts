@@ -1,20 +1,14 @@
 import express from 'express';
-
 import { join } from 'path';
 
-import { clientAssets } from 'server/middleware/clientAssets';
-import { prepareState } from 'server/middleware/prepareState';
-import { renderPage } from 'server/middleware/renderPage';
 import { errorHandler } from 'server/middleware/errorHandler';
+import { ssr } from 'server/middleware/ssr';
 
 const app = express();
 
 app.use(express.static(join(__dirname, 'client')));
 
-// Normal page rendering process
-app.use(prepareState());
-app.use(clientAssets());
-app.use(renderPage());
+app.use(ssr);
 
 // Handle all errors
 app.use(errorHandler());

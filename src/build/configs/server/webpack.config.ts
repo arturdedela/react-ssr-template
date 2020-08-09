@@ -1,7 +1,7 @@
 import { WebpackClusterPlugin } from 'build/webpack/WebpackClusterPlugin';
 import { resolve } from 'path';
 import { DefinePlugin } from 'webpack';
-import { LAZY_COMPONENT_PLUGIN } from 'build/babel/lazyComponentBabelPlugin';
+import LoadablePlugin from '@loadable/webpack-plugin';
 import { merge } from 'webpack-merge';
 import defaultConfig from 'build/configs/common.webpack.config';
 import nodeExternals from 'webpack-node-externals';
@@ -18,7 +18,7 @@ export default merge(defaultConfig, {
         libraryTarget: 'commonjs2',
     },
 
-    externals: [nodeExternals()],
+    externals: ['@loadable/component', nodeExternals()],
 
     module: {
         rules: [
@@ -54,7 +54,8 @@ export default merge(defaultConfig, {
                                         ['@babel/preset-react', {}],
                                     ],
                                     plugins: [
-                                        LAZY_COMPONENT_PLUGIN,
+                                        '@loadable/babel-plugin',
+                                        ['@babel/plugin-proposal-decorators', { legacy: true }],
                                         '@babel/plugin-proposal-class-properties',
                                         '@babel/plugin-transform-runtime',
                                     ],
@@ -73,6 +74,8 @@ export default merge(defaultConfig, {
     },
 
     plugins: [
+        new LoadablePlugin(),
+
         new WebpackClusterPlugin({ filename: 'main.js' }),
         new DefinePlugin({
             'typeof window': '"undefined"',

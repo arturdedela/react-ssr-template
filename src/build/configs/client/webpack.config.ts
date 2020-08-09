@@ -1,23 +1,22 @@
-import WebpackManifestPlugin from 'webpack-manifest-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import OptimizeCssAssetsPlugin from 'optimize-css-assets-webpack-plugin';
 import { DefinePlugin } from 'webpack';
 import { resolve } from 'path';
-import { LAZY_COMPONENT_PLUGIN } from 'build/babel/lazyComponentBabelPlugin';
 import { merge } from 'webpack-merge';
 import defaultConfig from 'build/configs/common.webpack.config';
+import LoadablePlugin from '@loadable/webpack-plugin';
 
-const PUBLIC_PATH = '/assets/';
+const PUBLIC_PATH = '/';
 const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 
 export default merge(defaultConfig, {
     name: 'client',
-    entry: resolve('src/client/index.ts'),
+    entry: resolve('src/client/index.tsx'),
 
     output: {
-        path: resolve('dist/client/assets'),
+        path: resolve('dist/client'),
         filename: IS_PRODUCTION ? '[contenthash:8].js' : '[name].js',
-        chunkFilename: IS_PRODUCTION ? '_[contenthash:8].js' : '_[name].js',
+        chunkFilename: IS_PRODUCTION ? '[contenthash:8].js' : '[name].js',
         publicPath: PUBLIC_PATH,
     },
 
@@ -54,7 +53,8 @@ export default merge(defaultConfig, {
                                         ['@babel/preset-typescript', {}],
                                     ],
                                     plugins: [
-                                        LAZY_COMPONENT_PLUGIN,
+                                        '@loadable/babel-plugin',
+                                        ['@babel/plugin-proposal-decorators', { legacy: true }],
                                         '@babel/plugin-proposal-class-properties',
                                         '@babel/plugin-transform-runtime',
                                         'babel-plugin-optimize-react',
@@ -84,28 +84,10 @@ export default merge(defaultConfig, {
     },
 
     plugins: [
+        new LoadablePlugin(),
         new MiniCssExtractPlugin({
             filename: IS_PRODUCTION ? '[contenthash:8].css' : '[name].css',
-            chunkFilename: IS_PRODUCTION ? '_[contenthash:8].css' : '_[name].css',
-        }),
-
-        new WebpackManifestPlugin({
-            fileName: '../../asset-manifest.json',
-            publicPath: PUBLIC_PATH,
-            generate(seed, files) {
-                const manifestFiles = files.reduce(function (manifest, file) {
-                    if (file.name) {
-                        // @ts-ignore
-                        manifest[file.name] = file.path;
-                    }
-
-                    return manifest;
-                }, seed);
-
-                return {
-                    files: manifestFiles,
-                };
-            },
+            chunkFilename: IS_PRODUCTION ? '[contenthash:8].css' : '[name].css',
         }),
 
         new DefinePlugin({

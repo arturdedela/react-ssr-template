@@ -1,6 +1,6 @@
 import { RouteProps } from 'react-router';
-import { lazyComponentBabel } from 'components/Lazy/Lazy';
 import { Routes } from 'routes';
+import loadable from '@loadable/component';
 
 export enum PageName {
     HOME = 'home',
@@ -12,7 +12,7 @@ export const PAGES: Record<PageName, RouteProps> = {
     [PageName.HOME]: {
         exact: true,
         path: Routes.HOME,
-        component: lazyComponentBabel(() =>
+        component: loadable(() =>
             import(/* webpackChunkName: "page.home" */ 'components/Section/HomeSection/HomeSection'),
         ),
     },
@@ -20,13 +20,13 @@ export const PAGES: Record<PageName, RouteProps> = {
     [PageName.DASHBOARD]: {
         path: Routes.DASHBOARD,
 
-        component: lazyComponentBabel(() =>
+        component: loadable(() =>
             import(/* webpackChunkName: "page.dashboard" */ 'components/Section/DashboardSection/DashboardSection'),
         ),
     },
 
     [PageName.NOT_FOUND]: {
-        component: lazyComponentBabel(() =>
+        component: loadable(() =>
             import(/* webpackChunkName: "page.notFound" */ 'components/Section/NotFoundContent/NotFoundContent'),
         ),
     },

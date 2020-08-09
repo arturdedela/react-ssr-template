@@ -6,6 +6,8 @@
         "esModuleInterop": true,
         "jsx": "react",
         "moduleResolution": "node",
-        "baseUrl": "src"
+        "baseUrl": "src",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true
     }
 }
